@@ -1,4 +1,4 @@
-CREATE TABLE Usuários (
+CREATE TABLE Usuarios (
 id_usuario INTEGER PRIMARY KEY AUTOINCREMENT,
 nome varchar(100) NOT NULL,
 email varchar(100) NOT NULL UNIQUE,
@@ -10,12 +10,12 @@ id_conta INTEGER PRIMARY KEY AUTOINCREMENT,
 id_usuario INTEGER NOT NULL,
 nome_conta varchar(100) NOT NULL,
 tipo_conta varchar(100) NOT NULL,
-FOREIGN KEY (id_usuario) REFERENCES Usuarios(id_usuario),
+FOREIGN KEY (id_usuario) REFERENCES Usuarios(id_usuario)
 );
 
 CREATE TABLE Categorias (
 id_categoria INTEGER PRIMARY KEY AUTOINCREMENT,
-id_usuário INTEGER NOT NULL,
+id_usuario INTEGER NOT NULL,
 nome_categoria varchar(100) NOT NULL,
 FOREIGN KEY (id_usuario) REFERENCES Usuarios(id_usuario)
 );
