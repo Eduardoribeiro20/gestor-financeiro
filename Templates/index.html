@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor Financeiro</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        <!--Estilo de Tabela-->
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #2c3e50;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        <!--Cores para Receita e Despesas-->
+        .tipo-receita {
+            color: green;
+            font-weight: bold;
+        }
+
+        .tipo-despesa {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Olá, {{nome}}!</h1>
+        <h3>Suas Últimas Transações</h3>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Descrição</th>
+                    <th>Categoria</th>
+                    <th>Conta</th>
+                    <th>Valor</th>
+                </tr>
+            </thead>
+        <thead>
+            <tbody>
+                {% for item in lista_transacoes %}
+                <tr>
+                    <td>{{item ['data']}}</td>
+                    <td>{{item ['descricao']}}</td>
+                    <td>{{item ['nome_categoria']}}</td>
+                    <td>{{item ['nome_conta']}}</td>
+
+                    <td class="{{ 'tipo-receita' if item['tipo'] == 'Receita' else 'tipo-despesa'}}">
+                        R${{item['valor']}}
+                    </td>
+                </tr>
+            </tbody>
+            {% endfor %}
+        </thead>
+        </table>
+    </div>
+</body>
+</html>

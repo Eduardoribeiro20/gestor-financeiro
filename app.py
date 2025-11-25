@@ -1,26 +1,8 @@
-#Importação do Flask
-#from flask import Flask
-
-#Criação da Aplicação
-#app = Flask (__name__)
-
-#Criação da primeira "rota" (Página Inicial)
-#@app.route("/")
-#def hello_world():
-#    return "<p>Olá, mundo! Este é o motor do meu Gestor Financeiro!</p>"
-
-#if __name__ == "__main__":
- #   app.run(debug=True)
-
-
-
-
 import sqlite3
-from flask import Flask
+from flask import Flask, render_template
 
-app = Flask(__name__)
+app = Flask (__name__)
 
-# Função para conectar ao Banco de Dados
 def get_db_connection():
     conn = sqlite3.connect('gestor.db')
     conn.row_factory = sqlite3.Row #Irá permitir as colunas pelo nome
@@ -28,20 +10,26 @@ def get_db_connection():
 
 @app.route("/")
 def index():
-    # 1. Conecta no Banco
     conn = get_db_connection()
 
-   # 2. Busca todos os usuários
-    usuarios = conn.execute('SELECT * FROM Usuarios').fetchall()
+    # 1. Pegará o Usuário
+    usuario = conn.execute('SELECT * FROM Usuarios').fetchone()
 
-   # 3. Fecha conexão
+    # 2. Pegará as Transações
+    # Nesse momento, ocorrerá a junção da tabela Transacoes com Categorias e Contas, para que seja mostrado o nome da categoria ao ínves de
+    # somente mostrar o número de ID.
+    query = """SELECT t.*, c.nome_categoria, co.nome_conta
+               FROM Transacoes t
+               JOIN Categorias c ON t.id_categoria = c.id_categoria
+               JOIN Contas co ON t.id_conta = co.id_conta
+               ORDER BY t.data DESC"""
+
+    transacoes = conn.execute(query).fetchall()
+
     conn.close()
 
-  # 4. Pega o primeiro usuário da lista (o admin)
-    usuario_admin = usuarios[0]
+# 3. Envia tudo para o HTML
+    return render_template('index.html', nome=usuario['nome'], lista_transacoes = transacoes)
 
-  # 5. Mostra na Tela
-    return f"<h1> Olá, {usuario_admin['nome']}! </h1> <p>Seu email é: {usuario_admin['email']}</p>"
-
-if __name__ == "__main__":
-    app.run (debug=True)
+if (__name__) == "__main__":
+    app.run(debug=True)
